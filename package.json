@@ -1,0 +1,14 @@
+{
+  "name": "overimba",
+  "version": "0.0.1",
+  "description": "overwatch analysis backend",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "C.Humber",
+  "license": "ISC",
+  "dependencies": {
+    "overwatch-js": "^1.8.0"
+  }
+}
