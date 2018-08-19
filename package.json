@@ -1,14 +1,17 @@
 {
   "name": "overimba",
   "version": "0.0.1",
-  "description": "overwatch analysis backend",
+  "description": "Overwatch stat comparison app.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
   },
-  "author": "C.Humber",
+  "author": "cloverpi",
   "license": "ISC",
   "dependencies": {
-    "overwatch-js": "^1.8.0"
+    "express": "^4.16.3",
+    "overwatch-js": "^1.8.0",
+    "pug": "^2.0.3"
   }
 }
