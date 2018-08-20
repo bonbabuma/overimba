@@ -1,14 +1,22 @@
 //const mongoClient = require('mongodb').MongoClient;
-const app = require('express')();
+const express = require('express');
+const app = express();
+
 const url = 'mongodb://localhost:27017';
+
+
 const owjs = require('overwatch-js');
+
+
 
 //const db = client.db
 app.set('view engine', 'pug');
+//app.use('/front', express.static('public'));
+app.use('/', express.static('front'));
 
 
 
-app.get('/', (req, res) => {
+app.get('/api/:system/:btag', (req, res) => {
 	/*
 	mongoClient.connect(url, function (err, client) {
 		let collection = client.db('comics').collection('superheroes');
@@ -28,8 +36,11 @@ app.get('/', (req, res) => {
 	});
 	
 	*/
+	const system = req.params.system;
+	const btag = req.params.btag;
+	
 	owjs
-		.getOverall('pc', 'us', 'SuperFine-11919')
+		.getAll(system, 'us', btag)
 		//.then((data) => console.dir(data, {depth : 7, colors : true}) );
 		.then((data) => {
 				//console.log(data['quickplay']['heroes']['soldier:_76']);
@@ -47,7 +58,7 @@ app.get('/', (req, res) => {
 app.get('/bernar', (req, res) => {
 
 	owjs
-		.getOverall('pc', 'us', 'BERNAR-31452')
+		.getAll('pc', 'us', 'BERNAR-31452')
 		//.then((data) => console.dir(data, {depth : 7, colors : true}) );
 		.then((data) => {
 				//console.log(data['quickplay']['heroes']['soldier:_76']);
@@ -65,7 +76,7 @@ app.get('/bernar', (req, res) => {
 app.get('/tae', (req, res) => {
 
 	owjs
-		.getOverall('pc', 'us', 'Tae-2464')
+		.getAll('pc', 'us', 'Tae-2464')
 		//.then((data) => console.dir(data, {depth : 7, colors : true}) );
 		.then((data) => {
 				//console.log(data['quickplay']['heroes']['soldier:_76']);
@@ -82,7 +93,7 @@ app.get('/tae', (req, res) => {
 app.get('/smurf', (req, res) => {
 
 	owjs
-		.getOverall('pc', 'us', 'smurf-31604')
+		.getAll('pc', 'us', 'smurf-31604')
 		//.then((data) => console.dir(data, {depth : 7, colors : true}) );
 		.then((data) => {
 				//console.log(data['quickplay']['heroes']['soldier:_76']);
@@ -100,7 +111,7 @@ app.get('/smurf', (req, res) => {
 app.get('/dawn', (req, res) => {
 
 	owjs
-		.getOverall('pc', 'us', 'Dauwniedd-2221')
+		.getAll('pc', 'us', 'Dauwniedd-2221')
 		//.then((data) => console.dir(data, {depth : 7, colors : true}) );
 		.then((data) => {
 				//console.log(data['quickplay']['heroes']['soldier:_76']);
@@ -117,7 +128,7 @@ app.get('/dawn', (req, res) => {
 app.get('/summit', (req, res) => {
 
 	owjs
-		.getOverall('pc', 'us', 'Summit-11688')
+		.getAll('pc', 'us', 'Summit-11688')
 		//.then((data) => console.dir(data, {depth : 7, colors : true}) );
 		.then((data) => {
 				//console.log(data['quickplay']['heroes']['soldier:_76']);
