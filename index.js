@@ -36,8 +36,10 @@ app.get('/api/:system/:btag', (req, res) => {
 	});
 	
 	*/
+	
 	const system = req.params.system;
 	const btag = req.params.btag;
+	const start = Date.now();
 	
 	owjs
 		.getAll(system, 'us', btag)
@@ -47,6 +49,7 @@ app.get('/api/:system/:btag', (req, res) => {
 				//console.log(data.quickplay.heroes['soldier:_76']);
 				//console.log(data);
 				//console.log(Date.now() - start);
+				console.log(Date.now() - start);
 				res.send(data);
 		});
 	
