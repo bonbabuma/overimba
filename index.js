@@ -150,7 +150,7 @@ app.get('/summit', (req, res) => {
 
 
 
-app.listen(3000, (err) => {
+app.listen(80, (err) => {
 	if (err) {
 		console.log('yo dawg, its been an error');
 		return;
