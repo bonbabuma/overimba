@@ -3,6 +3,7 @@ const express = require('express');
 const app = express();
 
 const url = 'mongodb://localhost:27017';
+const PORT = process.env.PORT || 3000
 
 
 const owjs = require('overwatch-js');
@@ -150,7 +151,7 @@ app.get('/summit', (req, res) => {
 
 
 
-app.listen(80, (err) => {
+app.listen(PORT, (err) => {
 	if (err) {
 		console.log('yo dawg, its been an error');
 		return;
