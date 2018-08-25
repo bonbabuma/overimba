@@ -1,20 +1,13 @@
 window.onload = function() {
+	
 	const btagform = document.getElementById('btagform');
 	
 	btagform.onsubmit = function () {
-		//alert('yo dawg');
 		
 		let btag = document.getElementById('btagsearch').value;
 		btag = btag.replace('#',"-");
-		alert(btag);
 		
-		
-		location.href = "api/pc/" +  btag;   //qstnmrk-1366";
+		location.href = "api/pc/" +  btag;
 		return false;
-	}
-	
-	
-	//location.href = url;
-	
-	
+	}	
 }
