@@ -1,39 +1,66 @@
+
+
 const express = require('express');
+const morgan = require('morgan');
+const winston = require('winston');
+const owStats = require('./stats.js');
+//const owjs = require('overwatch-js');
+
 const app = express();
-const PORT = process.env.PORT || 3000
-
-
-const owjs = require('overwatch-js');
+const PORT = process.env.PORT || 3000;
 
 
 
-//const db = client.db
+
+let logger = winston.createLogger({
+    transports: [
+        new winston.transports.File({
+            level: 'info',
+            filename: 'access.log',
+            handleExceptions: true,
+            json: false,
+            maxsize: 5242880, //5MB
+            maxFiles: 5,
+            colorize: true
+        }),
+        new winston.transports.Console({
+            level: 'debug',
+            handleExceptions: true,
+            json: false,
+            colorize: true
+        })
+    ],
+    exitOnError: false
+});
+
+logger.stream = {
+    write: function (message, encoding) {
+        logger.info(message);
+    }
+}; 
+
+
+
+
+
+
+app.use(morgan('combined', { "stream": logger.stream }));
 app.set('view engine', 'pug');
 app.use('/', express.static('front'));
-
-
 
 app.get('/api/:platform/:btag', (req, res) => {
 	
 	const platform = req.params.platform;
 	const btag = req.params.btag;
-	const start = Date.now();
 	
-	owjs
-		.getAll(platform, 'us', btag)
-		.then((data) => {
-				console.log(btag ': ' + (Date.now() - start) );
-				res.send(data);
-		});
-	
+	owStats.getNewStats(platform, btag).then((data) => {
+		//console.log('yup');
+		console.log(data);
+		res.send(data);
+	});
 	
 	
 });
-
-
-
-
-
 
 
 app.listen(PORT, (err) => {
@@ -41,5 +68,7 @@ app.listen(PORT, (err) => {
 		console.log('yo dawg, its been an error');
 		return;
 	}
-	console.log('Example app listening on port 3000!');
+	console.log('Example app listening on port ' + PORT);
 });
+
+

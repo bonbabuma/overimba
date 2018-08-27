@@ -1,5 +1,5 @@
 const mongoClient = require('mongodb').MongoClient;
-const MONGOURL = 'mongodb://localhost:27017';
+const MONGOURI = 'mongodb://admin:MonsterEnergy3197@127.0.0.1:27017';
 
 
 
