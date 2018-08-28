@@ -48,6 +48,7 @@ app.use(morgan('combined', { "stream": logger.stream }));
 app.set('view engine', 'pug');
 app.use('/', express.static('front'));
 
+
 app.get('/api/:platform/:btag', (req, res) => {
 	
 	const platform = req.params.platform;
@@ -55,7 +56,7 @@ app.get('/api/:platform/:btag', (req, res) => {
 	
 	owStats.getNewStats(platform, btag).then((data) => {
 		//console.log('yup');
-		console.log(data);
+		//console.log(data);
 		res.send(data);
 	});
 	
@@ -65,10 +66,10 @@ app.get('/api/:platform/:btag', (req, res) => {
 
 app.listen(PORT, (err) => {
 	if (err) {
-		console.log('yo dawg, its been an error');
+		console.log('ERROR: Failed to start express sever');
 		return;
 	}
-	console.log('Example app listening on port ' + PORT);
+	console.log('Express listening on port ' + PORT);
 });
 
 

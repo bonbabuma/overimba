@@ -5,19 +5,19 @@ const MONGOURI = 'mongodb://admin:MonsterEnergy3197@127.0.0.1:27017';
 
 
 let database = function () {
-    //var self = this;
+
 	
 	mongoClient.connect(url, function (err, client) {
-		let collection = client.db('comics').collection('superheroes');
+		let collection = client.db('players').collection('stats');
 		
-		
+		//find the shiznits
 		collection.find({}).toArray((error, documents) => {
 			console.log(documents);
 			client.close();
 			
 			//res.send(documents);
 			let docu = {};
-			docu.heroArray = documents;
+			docu.Stats = documents;
 			
 			res.render('index', docu);
 		});

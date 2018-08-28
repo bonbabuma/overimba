@@ -10,6 +10,7 @@ let owStats = function() {
 	
 	
 	let globalStats = (stats) => {
+		
 		return "yo dawg, sup";
 	};
 
@@ -35,7 +36,7 @@ let owStats = function() {
 				
 				return Promise.all(promises).then(() => {
 					return result;
-				});
+				}).then;
 			});
 				
 	}
