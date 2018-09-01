@@ -4,7 +4,7 @@ const express = require('express');
 const morgan = require('morgan');
 const winston = require('winston');
 const owStats = require('./stats.js');
-//const owjs = require('overwatch-js');
+
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -53,11 +53,11 @@ app.get('/api/:platform/:btag', (req, res) => {
 	
 	const platform = req.params.platform;
 	const btag = req.params.btag;
+	const start = Date.now();
 	
 	owStats.getNewStats(platform, btag).then((data) => {
-		//console.log('yup');
-		//console.log(data);
 		res.send(data);
+		console.log(Date.now() - start);
 	});
 	
 	
