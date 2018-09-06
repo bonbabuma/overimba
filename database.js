@@ -1,26 +1,42 @@
-const mongoClient = require('mongodb').MongoClient;
-const MONGOURI = 'mongodb://admin:MonsterEnergy3197@127.0.0.1:27017';
 
 
+const mongo = require('mongodb').MongoClient;
+const MONGOURI = 'mongodb://127.0.0.1:27017';
 
 
-let database = function () {
-
-	
-	mongoClient.connect(url, function (err, client) {
-		let collection = client.db('players').collection('stats');
+function Mongodatabase( database ) {
+		let mongoClient;  
+		let mongoDB;
 		
-		//find the shiznits
-		collection.find({}).toArray((error, documents) => {
-			console.log(documents);
-			client.close();
-			
-			//res.send(documents);
-			let docu = {};
-			docu.Stats = documents;
-			
-			res.render('index', docu);
+		this.query = (collection, query, limit) => {
+			return mongoDB.collection(collection).find( query ).limit( limit ).toArray();
+		}
+		
+		this.replaceDocument = (collection, query, document) => {
+			mongoDB.collection(collection).replaceOne(query, document,{upsert: true});
+		}
+		
+		this.setDB = ( db ) => {
+			if ( mongoClient != null) {
+				mongoDB = mongoClient(db);
+			} else {
+				throw Error ('Connection has not been established.')
+			}
+		}
+
+		this.close = () => {
+			return mongoClient.close();
+		}
+		
+		mongo.connect(MONGOURI, { useNewUrlParser: true } )
+		.then( (client) => {
+			mongoClient = client;
+			mongoDB = mongoClient.db(database);
+		})
+		.catch( (error) => {
+			console.log('ERROR:', error);
 		});
-		
-	});
 }
+
+
+module.exports = Mongodatabase;
