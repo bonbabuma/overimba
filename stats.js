@@ -8,13 +8,36 @@ const MongoDatabase = require('./database.js');
 
 
 let owStats = function() {
-	let db = new MongoDatabase( "overwatch" );
-	const PLAYERSCOLLECTION = "players";
+	let globalStats = 	{
+							quickplay: { global:{}, heroes:{} },
+							Bronze: { global:{}, heroes:{} },
+							Silver: { global:{}, heroes:{} },
+							Gold: { global:{}, heroes:{} },
+							Platinum: { global:{}, heroes:{} },
+							Diamond: { global:{}, heroes:{} },
+							Master: { global:{}, heroes:{} },
+							Grandmaster: { global:{}, heroes:{} }
+						};
+	const OVERALLSTATSID = "5b8b4be609a44987df8d539a";
 	const OVERALLSTATSCOLLECTION = "overallStats";
+	const PLAYERSCOLLECTION = "players";
 	const SESSIONCOLLECTION = "sessionStats";
+	let db = new MongoDatabase( "overwatch" );
+	
+	let storeOverall = () => {
+		return db.replaceDocument( OVERALLSTATSCOLLECTION, {_id: db.ObjectId(OVERALLSTATSID)}, globalStats );
+	}
+	
 	
 	let recalculateAverages = (average, cumulative, time) => {
-		let statAverage = average;
+		let statAverage = {};
+		
+		//static section
+		statsHelper.general.average.forEach( (key) => {
+			if (!isNaN(average[key])){
+				statAverage[key] = average[key];
+			}
+		});
 		
 		if (time.time_played != 0 && time.time_played != null ) {
 			let perTen = time.time_played / 1000 / 60 / 10;
@@ -40,6 +63,8 @@ let owStats = function() {
 				}
 			});
 		}
+		
+		
 		return statAverage;
 	};
 	
@@ -67,6 +92,12 @@ let owStats = function() {
 			}
 		});
 		
+		//time-catch: sometimes damage ticks from previous characters(junkrat, symetra, etc)
+		//get added onto current character when switching.
+		if (stats.time.time_played < 180000) {
+			stats.time.time_played = 180000;
+		}
+		
 		//quickplay catch
 		if (stats.cumulative.games_played == null) {
 			stats.cumulative.games_played = stats.cumulative.games_won;
@@ -79,28 +110,28 @@ let owStats = function() {
 	
 	let statsFramework = (owjsStats) => {
 		let start = Date.now();
-		let stats = {};
-		stats.global = {};
-		stats.heroes = {};
-		stats.sessions = [];
+		let statsFrame = {};
+		statsFrame.global = {};
+		statsFrame.heroes = {};
+		statsFrame.sessions = [];
 				
-		stats.global = refactor(owjsStats.global);
-		stats.global.masteringHeroe = owjsStats.global.masteringHeroe;
+		statsFrame.global = refactor(owjsStats.global);
+		statsFrame.global.masteringHeroe = owjsStats.global.masteringHeroe;
 		
 		Object.keys(statsHelper.heroSpecific).forEach( (hero) => {
 			if (owjsStats.heroes[hero] != null) {
-				stats.heroes[hero] = refactor( owjsStats.heroes[hero] );
+				statsFrame.heroes[hero] = refactor( owjsStats.heroes[hero] );
 			}
 		});
 		
 		console.log('total time to refactor: ' + (Date.now() - start));
-		return stats;
+		return statsFrame;
 	};
 
 	let diffStats = (newStats, oldStats) => {
-		let stats = {};
-		stats.cumulative = {};
-		stats.time = {};
+		let diffStatsObj = {};
+		diffStatsObj.cumulative = {};
+		diffStatsObj.time = {};
 		let newStat = 0;
 		let oldStat = 0;
 		
@@ -111,7 +142,7 @@ let owStats = function() {
 				oldStat = 0;
 			}
 			
-			stats.cumulative[key] = newStat - oldStat;
+			diffStatsObj.cumulative[key] = newStat - oldStat;
 		});
 		
 		Object.keys(newStats.time).forEach( (key) => {
@@ -121,31 +152,33 @@ let owStats = function() {
 				oldStat = 0;
 			}
 			
-			stats.time[key] = newStat - oldStat;
+			diffStatsObj.time[key] = newStat - oldStat;
 			
 		});
 		
 		//estimate time_played based on average of 'average per 10'
-		if ( stats.time.time_played == 0 ) {
-			if ( stats.cumulative.healing_done > stats.cumulative.all_damage_done ) {
+		if ( diffStatsObj.time.time_played == 0 ) {
+			if ( diffStatsObj.cumulative.healing_done > diffStatsObj.cumulative.all_damage_done ) {
 				let avgPerTen = (newStats.average.healing_done_avg_per_10_min + oldStats.average.healing_done_avg_per_10_min) / 2
-				stats.time.time_played = (stats.cumulative.healing_done / avgPerTen ) * 10 * 60 * 1000
+				diffStatsObj.time.time_played = (diffStatsObj.cumulative.healing_done / avgPerTen ) * 10 * 60 * 1000
 			} else {
 				let avgPerTen = (newStats.average.all_damage_done_avg_per_10_min + oldStats.average.all_damage_done_avg_per_10_min) / 2
-				stats.time.time_played = (stats.cumulative.all_damage_done / avgPerTen ) * 10 * 60 * 1000
+				diffStatsObj.time.time_played = (diffStatsObj.cumulative.all_damage_done / avgPerTen ) * 10 * 60 * 1000
 			}
 		}
 		
-		stats.average = recalculateAverages( newStats.average, stats.cumulative, stats.time );
+		diffStatsObj.average = recalculateAverages( newStats.average, diffStatsObj.cumulative, diffStatsObj.time );
 		
-		return stats;
+		return diffStatsObj;
 	};
 	
 	let sessionStats = (newStats, oldStats) => {
-		let stats = {};
-		stats.global = diffStats ( newStats.global, oldStats.global );
+		let sesStats = {};
+		sesStats.heroes = {};
 		
-		if ( stats.global.games_played > 0 ) {
+		sesStats.global = diffStats ( newStats.global, oldStats.global );
+		
+		if ( sesStats.global.cumulative.games_played > 0 ) {
 			let newHeroe = {};
 			let oldHeroe = {};
 			
@@ -153,27 +186,77 @@ let owStats = function() {
 				newHeroe = newStats.heroes[key];
 				oldHeroe = oldStats.heroes[key];
 				if (oldHeroe != null) {
-					stats.heroes[key] = diffStats(newHeroe, oldHeroe);
+					sesStats.heroes[key] = diffStats(newHeroe, oldHeroe);
 				} else {
 					if (newHeroe.cumulative.games_played > 0) {
-						stats.heroes[key] = newHeroe;
+						sesStats.heroes[key] = newHeroe;
 					}
 				}
 			});			
 		} else {
 			return {};
 		}
-		return stats;
+		return sesStats;
 	};
 	
-	let globalStats = (stats) => {
+	let recalculateGlobalStats = (stats, statsRank) => {
+		console.log(statsRank);
 		
+		let recalculateIndividualStats = (statsAveragesObj, globalStatsMASD) => {
+			Object.keys(statsAveragesObj).forEach( (key) => {			
+				if ( globalStatsMASD[key] != null && statsAveragesObj[key] != NaN ) {
+					let curAverage = globalStatsMASD[key].average;
+					let curVariance = globalStatsMASD[key].variance;
+					
+					let newAverage = ((curAverage * 100) + statsAveragesObj[key]) / 101;
+					let newVariance = (statsAveragesObj[key] - newAverage) ** 2;
+					newVariance = ((curVariance * 100) + newVariance) / 101;
+					
+					globalStatsMASD[key].average = newAverage;
+					globalStatsMASD[key].variance = newVariance;
+				} else {
+					globalStatsMASD[key] = {};
+					globalStatsMASD[key].average = statsAveragesObj[key];
+					globalStatsMASD[key].variance = statsAveragesObj[key] / 2;
+				}
+				
+			});
+		};
 		
-		return "yo dawg, sup";
-	};
 
-	this.cleanup = () => {
-		return db.close();
+		if ( statsRank != null && Object.keys(stats.competitiveStats).length > 0 ) {
+			recalculateIndividualStats( stats.competitiveStats.global.average, globalStats[statsRank].global );
+			Object.keys(stats.competitiveStats.heroes).forEach( (hero) => {
+				if ( globalStats[statsRank].heroes[hero] == null ) {
+					globalStats[statsRank].heroes[hero] = {};
+				}
+				recalculateIndividualStats( stats.competitiveStats.heroes[hero].average, globalStats[statsRank].heroes[hero] );
+			});
+		}
+		
+		if ( Object.keys(stats.quickplayStats).length > 0 ) {
+			if ( Object.keys(stats.quickplayStats.global.average).length > 0 ) {
+				recalculateIndividualStats( stats.quickplayStats.global.average, globalStats.quickplay.global );	
+				Object.keys(stats.quickplayStats.heroes).forEach( (hero) => {
+						if ( globalStats.quickplay.heroes[hero] == null ) {
+							globalStats.quickplay.heroes[hero] = {};
+						}
+					recalculateIndividualStats( stats.quickplayStats.heroes[hero].average, globalStats.quickplay.heroes[hero] );
+				});
+			}
+		}
+		
+		storeOverall();
+	};
+	
+	this.getOldStats = (platform, btag) => {
+		return db.query( PLAYERSCOLLECTION , { "profile.nick": btag }, 1).then( (data) => {
+			
+			return data;
+		})
+		.catch( (error) => {
+			console.log(error);
+		});
 	}
 
 	this.getNewStats = (platform, btag) => {
@@ -220,29 +303,79 @@ let owStats = function() {
 						return result;
 					});
 				})
-				.then( (stats) => {
+				.then( (data) => {
+					let startglobal = Date.now();
 					let allSessions = {};
 					let session = {};
-					session.competitiveStats = sessionStats( stats.competitiveStats, lastOverall[0].competitiveStats );
-					session.quickplayStats = sessionStats( stats.quickplayStats, lastOverall[0].quickplayStats );
-					
-					if ( Object.keys(session.competitiveStats) > 0 || Object.keys(session.quickplayStats) > 0 ) {
-						currentSessionStats.push(session);
-						
-						if (currentSessionStats.length >= 10) {
-							currentSessionStats.pop();					
+					session.competitiveStats = {};
+					session.quickplayStats = {};
+					let globalRankStats = {};
+					globalRankStats.quickplay = globalStats.quickplay;
+					if ( Object.keys(data.competitiveStats).length > 0 ) {
+						if ( data.profile.ranking != null ) {
+							globalRankStats.rank = globalStats[data.profile.ranking];
 						}
-						
-						allSessions.sessions = currentSessionStats;
-						allSessions.profile = stats.profile;
-						
-						db.replaceDocument( SESSIONCOLLECTION, { "profile.nick": btag }, allSessions ); 
 					}
-					db.replaceDocument( PLAYERSCOLLECTION, { "profile.nick": btag }, stats );
-					return stats;
+					
+					if (lastOverall.length > 0) {
+						session.competitiveStats = sessionStats( data.competitiveStats, lastOverall[0].competitiveStats );
+						session.quickplayStats = sessionStats( data.quickplayStats, lastOverall[0].quickplayStats );
+						
+						if ( Object.keys(session.competitiveStats).length > 0 || Object.keys(session.quickplayStats).length > 0 ) {
+							
+							let statsRank = data.profile.ranking;
+							recalculateGlobalStats (session, statsRank);
+							currentSessionStats.push(session);
+							if (currentSessionStats.length >= 10) {
+								currentSessionStats.pop();					
+							}
+							allSessions.sessions = currentSessionStats;
+							allSessions.profile = data.profile;
+							
+							db.replaceDocument( SESSIONCOLLECTION, { "profile.nick": btag }, allSessions ); 
+							db.replaceDocument( PLAYERSCOLLECTION, { "profile.nick": btag }, data );
+							
+							data.sessions = currentSessionStats;
+						}
+					} else {
+						db.replaceDocument( PLAYERSCOLLECTION, { "profile.nick": btag }, data );
+						//recalculateGlobalStats (data, data.profile.ranking);
+					}
+					
+					console.log("Global time: " + (Date.now() - startglobal));
+					recalculateGlobalStats (data, data.profile.ranking);//remove
+					data.globalStats = globalRankStats;
+					
+					return data;
 				});
 		});
 	}
+
+	
+	this.cleanup = () => {
+		storeOverall()
+		
+		return db.close();
+		
+	}
+	
+	let connectDB = () => {
+		db.connect().then( () => {
+		
+			db.query(OVERALLSTATSCOLLECTION, {_id: db.ObjectId(OVERALLSTATSID)}, 1).then( (data) => {
+				console.log(data);
+				if (data.length > 0) {
+					globalStats = data[0];
+				}
+				
+			})		
+		})
+		.catch( (error) => {
+			console.log(error);
+		});
+	}
+	
+	connectDB();
 }
 
 

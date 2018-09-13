@@ -39,8 +39,12 @@ logger.stream = {
 
 app.use(morgan('combined', { "stream": logger.stream }));
 app.set('view engine', 'pug');
-app.use('/', express.static('front'));
+app.use('/assets/', express.static('front'));
 
+
+app.get('/', (req, res) => {
+	res.render('index');
+});
 
 app.get('/api/:platform/:btag', (req, res) => {
 	
@@ -63,6 +67,33 @@ app.get('/api/:platform/:btag', (req, res) => {
 		}
 	});
 });
+
+app.get('/:platform/:btag/:hero', (req, res) => {
+	
+	const platform = req.params.platform;
+	const btag = req.params.btag;
+	const hero = req.params.hero;
+	let currentSession = {};
+	currentSession.date = Date.now()
+	currentSession.hero = hero.replace(":_", "");
+	
+	
+	let btagOldStats = {};
+	owStats.getOldStats(platform, btag)
+	.then( (data) => {
+		
+		//if data empty, fill object with basic data and set to auto-fetch.
+		
+		data[0].currentSession = currentSession;
+
+		res.render('hero', data[0]);		
+	})
+	.catch( (error) => {
+		console.log(error);
+	});
+	
+});
+
 
 app.listen(PORT, (err) => {
 	if (err) {

@@ -1,0 +1,444 @@
+* {
+  color: #CCC; }
+
+@font-face {
+    font-family: Overwatch;
+	font-weight: bold;
+	font-style: oblique;
+    src: url(/assets/css/fonts/big_noodle_titling_oblique.ttf);
+}
+  
+body, html {
+  margin: 0;
+  padding: 0; }
+
+body {
+  background-image: url("/assets/images/bg2.jpg");
+  background-size: cover;
+  background-attachment: fixed;
+  display: block;
+  font-family: Arial, Helvetica, sans-serif;
+  min-height: 100%;
+  position: relative; }
+
+#main {
+  margin: auto;
+  width: 900px;
+  min-height: 100%;
+  background-color: #111;
+  opacity: 0.65; }
+
+.navbar {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333; }
+
+.navbar li {
+  float: left;
+  border-right: 1px solid #bbb; }
+
+.navbar li a {
+  display: block;
+  color: #FFF;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none; }
+
+.navbar li a:hover:not(.navbar-active) {
+  background-color: #111; }
+
+.navbar-active {
+  background-color: #cc001c; }
+
+input[type=text], select {
+  width: 100%;
+  padding: 9px 10px;
+  margin: 5px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box; }
+
+p {
+  /*color: #CCCCCC;*/ }
+  
+.invisible {
+	visibility: hidden;
+}
+  
+.phc {
+  display: grid;
+  width: 100%;
+  height: 135px;
+  margin: 10px 0 10px 0;
+  grid-template-areas: "Profilepic btag rankvalue rankpicture"
+  "Menu Menu modeselect modeselect";
+  grid-template-columns: 100px 6fr 1fr 1fr;
+  grid-template-rows: 100px 40px;
+}
+.phc > div {
+  border: 1px dashed #888;
+}
+
+.Profilepic {
+  grid-area: Profilepic;
+}
+
+.Profilepic > img {
+	width: 100%;
+	height: 100%;
+}
+
+.btag {
+  grid-area: btag;
+}
+
+.btag .nick {
+	font-family: 'Overwatch', Arial, Helvetica, sans-serif;
+	font-size: 32px;
+	font-weight: 900;
+	text-transform: uppercase;
+	margin: auto auto auto 5px;
+}
+.rankvalue {
+  grid-area: rankvalue;
+}
+.rankpicture {
+  grid-area: rankpicture;
+}
+
+.rankpicture > img {
+	width: 100%;
+	height: 100%;
+}
+
+.Menu {
+  grid-area: Menu;
+}
+.modeselect {
+  grid-area: modeselect;
+}
+  
+.overall {
+	display: inline-block;
+    position: relative;
+}
+
+.overall > strong {
+    position: absolute;
+    top: 50px;
+	left: 1px;
+    width: 100%;
+    text-align: center;
+    line-height: 50px;
+    font-size: 40px;
+}
+
+.overall > div {
+	border: 1px solid #FFF;
+	border-radius: 4px;
+	display: inline;
+	text-align: center;
+	background-color: #000;
+    position: absolute;
+    top: 105px;
+    left: 3px;
+	width: 142px;
+}
+.overall div span {
+	display: inline;
+    text-align: center;
+    line-height: 30px;
+	font-size: 20px;
+}
+
+.Score {
+	position: relative;
+	left: 3px;
+}
+
+
+.statsContainer {
+  display: grid;
+  height: 100%;
+  border: 1px solid #888;
+  margin: 10px 0 10px 0;
+  grid-template-areas: "heroPortrait Hero winrate"
+  "Specific Specific Score";
+  grid-template-columns: 56px 1fr 205px;
+  grid-template-rows: 50px 1fr;
+}
+
+.winrate {
+  grid-area: winrate;
+  background-color: #052861;
+  text-align: right;
+}
+
+.winrate span {
+	text-align: right;
+
+}
+
+.heroPortrait {
+  grid-area: heroPortrait;
+  width: 56px;
+  height: 50px;
+}
+
+.heroPortrait img {
+	max-width: 100%;
+    max-height: 100%;
+}
+
+.Hero {
+  grid-area: Hero;
+  
+  background-color: #052861;
+}
+
+.Hero h2 {
+	font-family: 'Overwatch', Arial, Helvetica, sans-serif;
+	margin: 12px 0px auto 10px;
+	text-transform: capitalize;
+	/*
+	position: relative;
+	left: 5px;
+	*/
+}
+
+.Specific {
+  grid-area: Specific;
+  position: relative;
+}
+
+.statrow {
+	width: 95%;
+	left: 5px;
+	margin: 5px 0 0 0;
+	position: relative;
+}
+
+.statname {
+	width: 600px;
+	display: inline-block;
+}
+
+.percent {
+	width: 25px;
+	display: inline-block;
+}
+.statname div {
+	border: 1px solid #AAA;
+	border-radius: 4px;
+	position: relative;
+	margin: 0;
+}
+
+.Score {
+  grid-area: Score;
+  margin: auto;
+}
+
+.markerRank {
+	position: absolute;
+	top: -2px;
+	left: 435px;
+	z-index: 100;
+}
+
+.markerRank > img {
+	width: 32px;
+	height: 32px;
+}
+
+.sessionContainer {
+  /*margin: 10px 0 0 0;*/
+  display: grid;
+  height: 100%;
+  margin: 10px 0 10px 0;
+  grid-template-areas: "sessionCardsContainer miscStatsContainer";
+  grid-template-columns: 1fr 300px;
+  grid-template-rows: 1fr;
+}
+.sessionContainer > div {
+  /*border: 1px dashed #888;*/
+}
+
+.sessionCardsContainer {
+  grid-area: sessionCardsContainer;
+}
+.miscStatsContainer {
+  grid-area: miscStatsContainer;
+  margin: 0px 0px 0px 5px;
+}
+
+.sessionOverall {
+	/*display: inline-block;*/
+    position: relative;
+}
+
+.sessionOverall > strong {
+    position: absolute;
+    top: 12px;
+    left: 1px;
+    width: 100%;
+    text-align: center;
+    line-height: 50px;
+    font-size: 20px;
+}
+
+.sessionOverall > div {
+	border: 1px solid #FFF;
+	border-radius: 4px;
+	display: inline;
+	text-align: center;
+	background-color: #000;
+    position: absolute;
+    top: 50px;
+    left: 0px;
+	width: 75px;
+}
+.sessionOverall div span {
+	display: inline;
+    text-align: center;
+    line-height: 15px;
+	font-size: 15px;
+}
+
+.sessionScore {
+	position: relative;
+}
+
+#main > h3 {
+	margin: 10px 10px 0px 10px;
+    padding: 10px 0px 0px 0px;
+}
+
+
+.sessionCard {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  border: 1px solid #888;
+  margin: 0px 10px 5px 0px;
+  left: 0;
+  grid-template-areas: "sessionHeroPortrait sessionHero sessionWinrate"
+  "sessionSpecific sessionSpecific sessionScore";
+  grid-template-columns: 28px 1fr 135px;
+  grid-template-rows: 25px 1fr;
+}
+
+.sessionWinrate {
+  grid-area: sessionWinrate;
+  background-color: #052861;
+  text-align: right;
+}
+
+.sessionWinrate span {
+	text-align: right;
+
+}
+
+.sessionHeroPortrait {
+  grid-area: sessionHeroPortrait;
+  width: 28px;
+  height: 25px;
+}
+
+.sessionHeroPortrait img {
+	max-width: 100%;
+    max-height: 100%;
+}
+
+.sessionHero {
+  grid-area: sessionHero;
+  padding: 0px;
+  margin: 0px;
+  background-color: #052861;
+}
+
+.sessionHero h3 {
+	font-family: 'Overwatch', Arial, Helvetica, sans-serif;
+	margin: 2px 0px 0px 5px;
+	text-transform: capitalize;
+	
+}
+
+.sessionSpecific {
+  grid-area: sessionSpecific;
+  position: relative;
+}
+
+.sessionStatrow {
+	width: 95%;
+	left: 5px;
+	margin: 5px 0 0 0;
+	position: relative;
+}
+
+.sessionStatname {
+	width: 85%;
+	display: inline-block;
+}
+
+.sessionPercent {
+	width: 25px;
+	display: inline-block;
+}
+.sessionStatname div {
+	border: 1px solid #AAA;
+	border-radius: 4px;
+	position: relative;
+	margin: 0;
+}
+
+.sessionScore {
+  grid-area: sessionScore;
+  margin: auto;
+}
+
+.sessionMarkerRank {
+	position: absolute;
+	top: 1px;
+	left: 267px;
+	z-index: 100;
+}
+
+.sessionMarkerRank > img {
+	width: 28px;
+	height: 28px;
+}
+
+.miscContainer {
+  margin: 0px 0px 0px 0px;
+  display: grid;
+  /*width: 100%;*/
+  /*height: 100%;*/
+  border: 1px solid #888;
+  grid-template-areas: "miscHeader"
+  "miscStats";
+  grid-template-columns: 1fr;
+  grid-template-rows: 25px 1fr;
+}
+
+.miscContainer > div {
+  /*border: 1px solid #888;*/
+}
+
+.miscHeader {
+  grid-area: miscHeader;
+  background-color: #cc0001;
+  font-family: 'Overwatch', Arial, Helvetica, sans-serif;
+}
+
+.miscStats {
+  grid-area: miscStats;
+  margin: 2px;
+}
+
+.miscHeader h3 {
+	margin: 2px;
+}

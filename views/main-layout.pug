@@ -1,0 +1,23 @@
+doctype html
+html(lang='en')
+	block header
+	body
+		#main
+			ul.navbar
+				li
+					a.navbar-active(href="#home") OVERimba
+				li
+					a(href="#Ranks") Ranks
+				li
+					a(href="http://127.0.0.1:4567") Community
+				li(style="float:right;border-right: none;")
+					a(href="#about") Login
+				li(style="float:right;border-right: none;")
+					form#btagform(action="#")
+						input#btagsearch(type="text" name="battletag" placeholder="BattleTag#1234")
+			block phc
+			block main-stats
+			h3 Recent Play Sessions
+			.sessionContainer
+				block session-stats
+				block misc-stats

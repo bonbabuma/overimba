@@ -1,5 +1,5 @@
 
-
+const ObjectId = require('mongodb').ObjectID;
 const mongo = require('mongodb').MongoClient;
 const MONGOURI = 'mongodb://127.0.0.1:27017';
 
@@ -23,19 +23,26 @@ function Mongodatabase( database ) {
 				throw Error ('Connection has not been established.')
 			}
 		}
+		
+		this.ObjectId = (id) => {
+			return ObjectId(id);
+		}
 
 		this.close = () => {
 			return mongoClient.close();
 		}
 		
-		mongo.connect(MONGOURI, { useNewUrlParser: true } )
-		.then( (client) => {
-			mongoClient = client;
-			mongoDB = mongoClient.db(database);
-		})
-		.catch( (error) => {
-			console.log('ERROR:', error);
-		});
+		
+		this.connect = () => {
+			return mongo.connect(MONGOURI, { useNewUrlParser: true } )
+			.then( (client) => {
+				mongoClient = client;
+				mongoDB = mongoClient.db(database);
+			})
+			.catch( (error) => {
+				console.log('ERROR:', error);
+			});
+		}
 }
 
 

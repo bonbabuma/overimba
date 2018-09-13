@@ -4,10 +4,9 @@
          "critical_hit_accuracy",
          "weapon_accuracy",
          "eliminations_per_life",
-         "barrier_damage_done_avg_per_10_min",
-         "hero_damage_done_avg_per_10_min",
-         "all_damage_done_avg_per_10_min",
-         "win_percentage"
+         "win_percentage",
+		 "scoped_accuracy",
+         "unscoped_accuracy"
       ],
       "cumulative":[  
          "damage_blocked",

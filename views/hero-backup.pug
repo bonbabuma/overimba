@@ -1,0 +1,197 @@
+extends ./main-layout.pug
+
+doctype html
+html(lang='en')
+	head
+		title= OVERimba
+		link(rel="stylesheet" href="/assets/css/styles.css")
+		link(rel="stylesheet" href="/assets/css/progress.css")
+		script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js")
+		script(src="/assets/scripts/circle-progress.min.js")
+		script(src="/assets/scripts/transparency.min.js")
+		script(src="/assets/scripts/zscore.js" type="text/javascript")
+		script(src="/assets/scripts/script2.js" type="text/javascript" defer="")
+		script.
+	body
+		#main
+			ul.navbar
+				li
+					a.navbar-active(href="#home") OVERimba
+				li
+					a(href="#Ranks") Ranks
+				li
+					a(href="http://127.0.0.1:4567") Community
+				li(style="float:right;border-right: none;")
+					a(href="#about") Login
+				li(style="float:right;border-right: none;")
+					form#btagform(action="#")
+						input#btagsearch(type="text" name="battletag" placeholder="BattleTag#1234")
+			.phc
+				.Profilepic Profilepic
+				.btag
+					span.nick btag
+				.rankvalue rankvalue
+				.ranking rankpicture
+				.Menu Menu
+				.modeselect modeselect
+			.statsContainer
+				.heroPortrait
+					img(src="/assets/images/ana.png")
+				.Hero
+					h3 Ana
+				.winrate
+				.Specific
+					.statrow
+						.markerRank
+							img(src="/assets/images/Grandmaster.png")
+						.statname
+							span Healing done per 10: 
+							span.healing_done_per_10 0
+							.meter.red
+								span.healing_done_per_10_width(style="width: 75%")
+						.percent.healing_done_per_10_text
+					.statrow
+						.markerRank
+							img(src="/assets/images/Grandmaster.png")
+						.statname
+							span Damage done per 10: 
+							span.damage_done_per_10 0
+							.meter.red
+								span.damage_done_per_10_width(style="width: 75%")
+						.percent.damage_done_per_10_text
+					.statrow
+						.markerRank
+							img(src="/assets/images/Grandmaster.png")
+						.statname
+							span Healing done Avg per 10
+							.meter.red
+								span(style="width: 75%")
+						.percent 75%
+					.statrow
+						.markerRank
+							img(src="/assets/images/Grandmaster.png")
+						.statname
+							span Healing done Avg per 10
+							.meter.red
+								span(style="width: 90%")
+						.percent 90%
+					.statrow
+						.markerRank
+							img(src="/assets/images/Grandmaster.png")
+						.statname
+							span Healing done Avg per 10
+							.meter.red
+								span(style="width: 75%")
+						.percent 75%
+					.statrow
+						.markerRank
+							img(src="/assets/images/Grandmaster.png")
+						.statname
+							span Healing done Avg per 10
+							.meter.red
+								span(style="width: 75%")
+						.percent 75%
+				.Score
+					.overall
+						strong
+						.invisible
+							span OVERALL
+				br
+			h3 Recent Play Sessions
+			.sessionContainer
+				.sessionCardsContainer
+					.sessionCard
+						.sessionHeroPortrait
+							img(src="/assets/images/ana.png")
+						.sessionHero
+							h3 Ana
+						.sessionWinrate
+						.sessionSpecific
+							.sessionStatrow
+								.sessionMarkerRank
+									img(src="/assets/images/Grandmaster.png")
+								.sessionStatname
+									span Healing done Avg per 10
+									.meter.red
+										span(style="width: 75%")
+								.sessionPercent 75%
+							.sessionStatrow
+								.sessionMarkerRank
+									img(src="/assets/images/Grandmaster.png")
+								.sessionStatname
+									span Healing done Avg per 10
+									.meter.red
+										span(style="width: 75%")
+								.sessionPercent 75%
+							.sessionStatrow
+								.sessionMarkerRank
+									img(src="/assets/images/Grandmaster.png")
+								.sessionStatname
+									span Healing done Avg per 10
+									.meter.red
+										span(style="width: 75%")
+								.sessionPercent 75%
+							.sessionStatrow
+								.sessionMarkerRank
+									img(src="/assets/images/Grandmaster.png")
+								.sessionStatname
+									span Healing done Avg per 10
+									.meter.red
+										span(style="width: 75%")
+								.sessionPercent 75%
+						.sessionScore
+							#168.sessionOverall
+								strong
+								.invisible
+									span OVERALL
+						br
+					.sessionCard
+						.sessionHeroPortrait
+							img(src="/assets/images/ana.png")
+						.sessionHero
+							h3 Ana
+						.sessionWinrate
+						.sessionSpecific
+							.sessionStatrow
+								.sessionMarkerRank
+									img(src="/assets/images/Grandmaster.png")
+								.sessionStatname
+									span Healing done Avg per 10
+									.meter.red
+										span(style="width: 75%")
+								.sessionPercent 75%
+							.sessionStatrow
+								.sessionMarkerRank
+									img(src="/assets/images/Grandmaster.png")
+								.sessionStatname
+									span Healing done Avg per 10
+									.meter.red
+										span(style="width: 75%")
+								.sessionPercent 75%
+							.sessionStatrow
+								.sessionMarkerRank
+									img(src="/assets/images/Grandmaster.png")
+								.sessionStatname
+									span Healing done Avg per 10
+									.meter.red
+										span(style="width: 75%")
+								.sessionPercent 75%
+							.sessionStatrow
+								.sessionMarkerRank
+									img(src="/assets/images/Grandmaster.png")
+								.sessionStatname
+									span Healing done Avg per 10
+									.meter.red
+										span(style="width: 75%")
+								.sessionPercent 75%
+						.sessionScore
+							#169.sessionOverall
+								strong
+								.invisible
+									span OVERALL
+						br
+				.miscStatsContainer
+					.miscContainer
+						.miscHeader
+							h3 Miscellaneous
+						.miscStats miscStats
