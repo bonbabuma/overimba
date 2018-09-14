@@ -46,7 +46,9 @@ app.get('/', (req, res) => {
 	res.render('index');
 });
 
-app.get('/api/:platform/:btag', (req, res) => {
+
+//jquery everything
+app.get('/api/v2/all/:platform/:btag', (req, res) => {
 	
 	const platform = req.params.platform;
 	const btag = req.params.btag;
@@ -59,7 +61,7 @@ app.get('/api/:platform/:btag', (req, res) => {
 	})
 	.catch( (error) => {
 		if ( error.message == "PROFILE_NOT_FOUND" ) {
-			res.redirect("/players/search/" + btag);
+			res.redirect("/player/search/" + btag);
 			console.log(error.message);
 		} else {
 			res.send(error.message);
@@ -68,30 +70,155 @@ app.get('/api/:platform/:btag', (req, res) => {
 	});
 });
 
-app.get('/:platform/:btag/:hero', (req, res) => {
+
+
+
+//profile page
+app.get('/api/v2/player/:platform/:btag/:mode', (req, res) => {
+	
+	const platform = req.params.platform;
+	const btag = req.params.btag;
+	const mode = (req.params.mode == "competitiveStats") ? "competitiveStats" : "quickplayStats";
+	owStats.getProfile( platform, btag, mode ).then( (stats) => {
+		if ( stats.profile == 404 ) {
+			res.send({ profile: 404 });
+		} else {
+			
+			res.send(stats);
+		}
+	})
+	.catch( (error) => {
+		if ( error.message == "PROFILE_NOT_FOUND" ) {
+			console.log(error.message);
+		} else {
+			res.send(error.message);
+			console.log(error);
+		}
+	});
+	
+});
+
+//jquery hero stats
+app.get('/api/v2/hero/:platform/:btag/:mode/:hero', (req, res) => {
 	
 	const platform = req.params.platform;
 	const btag = req.params.btag;
 	const hero = req.params.hero;
-	let currentSession = {};
-	currentSession.date = Date.now()
-	currentSession.hero = hero.replace(":_", "");
-	
-	
-	let btagOldStats = {};
-	owStats.getOldStats(platform, btag)
-	.then( (data) => {
-		
-		//if data empty, fill object with basic data and set to auto-fetch.
-		
-		data[0].currentSession = currentSession;
+	const mode = req.params.mode;
+	owStats.getDBHeroStats(platform, btag, mode, hero).then( (stats) => {
+		res.send(stats);
+	})
+	.catch( (error) => {
+		console.log(error);
+	});
+});
 
-		res.render('hero', data[0]);		
+//jquery user search
+app.get('/api/v2/search/:platform/:btag', (req, res) => {
+	const platform = req.params.platform;
+	const btag = req.params.btag;
+	const mode = "quickplayStats";
+	owStats.searchOW(platform, btag).then( (data) => {
+		
+			res.send(data);
+		
+	})
+	.catch( (error) => {
+		if ( error.message == "PROFILE_NOT_FOUND" ) {
+			console.log(error.message);
+		} else {
+			res.send(error.message);
+			console.log(error);
+		}
+	});
+});
+
+//jquery rank stats
+app.get('/api/v2/ranks/:platform', (req, res) => {
+	
+	const platform = req.params.platform;
+	const mode = (req.query.mode == "competitiveStats") ? "competitiveStats" : "quickplayStats";
+	const skip = parseInt(req.query.skip) || 0;
+	const sort = (req.query.sort == "h10") ? "h10" : "d10";
+	const qty = (parseInt(req.query.qty) <= 20 ) ? parseInt(req.query.qty) : 20;
+	owStats.queryStats(platform, mode, sort, qty, skip).then( (stats) => {
+		res.send(stats);
+	})
+	.catch( (error) => {
+		console.log(error);
+	});
+});
+
+//hero page
+app.get('/player/:platform/:btag/:hero', (req, res) => {
+	
+	const platform = req.params.platform;
+	const btag = req.params.btag;
+	const hero = req.params.hero;
+	const mode = (req.query.mode == "competitiveStats") ? "competitiveStats" : "quickplayStats";
+	owStats.getDBHeroStats(platform, btag, mode, hero).then( (stats) => {
+		if (stats.profile == 404) {
+			//res.redirect("/player/search/" + btag); // change to pug view that gets stats.
+		} else {
+			res.render('hero', stats);
+		}
 	})
 	.catch( (error) => {
 		console.log(error);
 	});
 	
+});
+
+//profile page
+app.get('/player/:platform/:btag', (req, res) => {
+	
+	const platform = req.params.platform;
+	const btag = req.params.btag;
+	const mode = (req.query.mode == "competitiveStats") ? "competitiveStats" : "quickplayStats";
+	owStats.getProfile( platform, btag, mode ).then( (stats) => {
+		if (stats.profile == 404) {
+			res.redirect("/playersearch/pc" + btag);
+		} else {
+			console.log(stats.currentSession);
+			res.render('profile', { global: stats[mode].global, 
+									profile: stats.profile,
+									currentSession: stats.currentSession,
+									sessions: []
+									});
+		}
+	})
+	.catch( (error) => {
+		if ( error.message == "PROFILE_NOT_FOUND" ) {
+			console.log(error.message);
+		} else {
+			res.send(error.message);
+			console.log(error);
+		}
+	});
+	
+});
+
+app.get('/:platform/ranks', (req, res) => {
+	const platform = req.params.platform;
+	const mode = (req.query.mode == "competitiveStats") ? "competitiveStats" : "quickplayStats";
+	
+	
+	
+	res.render('ranks', { currentSession:
+							{
+								platform: platform,
+								mode: mode
+							}
+	});
+	
+});
+
+//search
+app.get('/playersearch/pc/:btag', (req, res) => {
+	const btag = req.params.btag;
+	currentSession = {};
+	currentSession.nick = btag;
+	res.render('search', currentSession);
 });
 
 

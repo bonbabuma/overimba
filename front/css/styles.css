@@ -71,15 +71,15 @@ p {
 .phc {
   display: grid;
   width: 100%;
-  height: 135px;
+  height: 148px;
   margin: 10px 0 10px 0;
   grid-template-areas: "Profilepic btag rankvalue rankpicture"
   "Menu Menu modeselect modeselect";
-  grid-template-columns: 100px 6fr 1fr 1fr;
-  grid-template-rows: 100px 40px;
+  grid-template-columns: 113px 5fr 1fr 1fr;
+  grid-template-rows: 113px 40px;
 }
 .phc > div {
-  border: 1px dashed #888;
+  /*border: 1px dashed #888;*/
 }
 
 .Profilepic {
@@ -114,11 +114,88 @@ p {
 	height: 100%;
 }
 
+img.rankIcon {
+	top: 3px;
+	width: 25px;
+}
+
+img.qpIcon {
+	top: 3px;
+	width: 25px;
+	height: 25px;
+}
+
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 30px;
+  height: 17px;
+  margin: auto;
+}
+
+.switch input {display:none;}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 13px;
+  width: 13px;
+  left: 2px;
+  bottom: 2px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(13px);
+  -ms-transform: translateX(13px);
+  transform: translateX(13px);
+}
+
+.slider.round {
+  border-radius: 17px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+
 .Menu {
   grid-area: Menu;
 }
 .modeselect {
   grid-area: modeselect;
+  
+}
+
+.modeSelectorBox {
+	position: relative;
+	left: 130px;
+	/*margin: auto;*/
+	width: 100px;
 }
   
 .overall {
@@ -186,6 +263,7 @@ p {
   grid-area: heroPortrait;
   width: 56px;
   height: 50px;
+  background-color: #052861;
 }
 
 .heroPortrait img {
@@ -222,7 +300,7 @@ p {
 }
 
 .statname {
-	width: 600px;
+	width: 90%;
 	display: inline-block;
 }
 
@@ -245,7 +323,8 @@ p {
 .markerRank {
 	position: absolute;
 	top: -2px;
-	left: 435px;
+	/*left: 435px;*/
+	left: 65%;
 	z-index: 100;
 }
 
@@ -313,6 +392,7 @@ p {
 }
 
 #main > h3 {
+	font-family: 'Overwatch', Arial, Helvetica, sans-serif;
 	margin: 10px 10px 0px 10px;
     padding: 10px 0px 0px 0px;
 }
@@ -327,7 +407,7 @@ p {
   left: 0;
   grid-template-areas: "sessionHeroPortrait sessionHero sessionWinrate"
   "sessionSpecific sessionSpecific sessionScore";
-  grid-template-columns: 28px 1fr 135px;
+  grid-template-columns: 28px 1fr 145px;
   grid-template-rows: 25px 1fr;
 }
 
@@ -372,14 +452,14 @@ p {
   position: relative;
 }
 
-.sessionStatrow {
+.sessionStatrow > .statrow {
 	width: 95%;
 	left: 5px;
 	margin: 5px 0 0 0;
 	position: relative;
 }
 
-.sessionStatname {
+.sessionStatrow > .statrow > .statname {
 	width: 85%;
 	display: inline-block;
 }
@@ -442,3 +522,168 @@ p {
 .miscHeader h3 {
 	margin: 2px;
 }
+
+
+
+
+.HeroTable {
+	border: 1px solid #888;
+	width: 100%;
+	text-align: left;
+	border-collapse: collapse;
+}
+.HeroTable td, .HeroTable th {
+	border: 1px solid #888;
+	padding: 3px 2px;
+}
+.HeroTable tbody td {
+	font-size: 15px;
+	color: #CCCCCC;
+}
+
+.HeroTable tr:nth-child(even) {
+	background: #ff001c55;
+}
+
+.HeroTable tr:hover {
+	background: #05286155;
+}
+
+.HeroTable thead {
+	background: #052861;
+}
+.HeroTable thead th {
+	font-family: 'Overwatch', Arial, Helvetica, sans-serif;
+	font-size: 17px;
+	font-weight: bold;
+	color: #CCCCCC;
+}
+.HeroTable thead th:first-child {
+	border-left: none;
+	width: 30px;
+}
+
+.HeroTable .heroName {
+	font-family: 'Overwatch', Arial, Helvetica, sans-serif;
+	font-size: 20px;
+}
+
+.HeroTable .heroList {
+	font-family: 'Overwatch', Arial, Helvetica, sans-serif;
+}
+
+.HeroTable .avatar {
+	/*width: 1*/
+	height: 30px;
+	margin:0px;
+	padding: 0px;
+}
+
+
+.RankTable {
+	border: 1px solid #888;
+	width: 50%;
+	text-align: left;
+	border-collapse: collapse;
+	margin: auto;
+}
+.RankTable td, .RankTable th {
+	border: 1px solid #888;
+	padding: 3px 2px;
+}
+.RankTable tbody td {
+	font-size: 15px;
+	color: #CCCCCC;
+}
+
+.RankTable tr:nth-child(even) {
+	background: #ff001c55;
+}
+
+.RankTable tr:hover {
+	background: #05286155;
+}
+
+.RankTable thead {
+	background: #052861;
+}
+.RankTable thead th {
+	font-family: 'Overwatch', Arial, Helvetica, sans-serif;
+	font-size: 17px;
+	font-weight: bold;
+	color: #CCCCCC;
+}
+.RankTable thead th:first-child {
+	border-left: none;
+	width: 30px;
+}
+
+.RankTable .heroName {
+	font-family: 'Overwatch', Arial, Helvetica, sans-serif;
+	font-size: 20px;
+}
+
+.heroList {
+	font-family: 'Overwatch', Arial, Helvetica, sans-serif;
+}
+
+.RankTable .btag {
+	/*width: 1*/
+	width: 100px;
+	
+}
+
+.SearchTable {
+	border: 1px solid #888;
+	width: 100%;
+	text-align: left;
+	border-collapse: collapse;
+}
+.SearchTable td, .SearchTable th {
+	border: 1px solid #888;
+	padding: 3px 2px;
+}
+.SearchTable tbody td {
+	font-size: 15px;
+	color: #CCCCCC;
+}
+
+.SearchTable tr:nth-child(even) {
+	background: #ff001c55;
+}
+
+.SearchTable tr:hover {
+	background: #05286155;
+}
+
+.SearchTable thead {
+	background: #052861;
+}
+.SearchTable thead th {
+	font-family: 'Overwatch', Arial, Helvetica, sans-serif;
+	font-size: 17px;
+	font-weight: bold;
+	color: #CCCCCC;
+}
+.SearchTable thead th:first-child {
+	border-left: none;
+	width: 30px;
+}
+
+.SearchTable .heroName {
+	font-family: 'Overwatch', Arial, Helvetica, sans-serif;
+	font-size: 20px;
+}
+
+.SearchTable .heroList {
+	font-family: 'Overwatch', Arial, Helvetica, sans-serif;
+}
+
+.SearchTable .avatar {
+	/*width: 1*/
+	height: 30px;
+	margin:0px;
+	padding: 0px;
+}
+
+

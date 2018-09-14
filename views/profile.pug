@@ -1,0 +1,22 @@
+extends ./layout/main-layout.pug
+
+block header
+	include ./layout/head.pug
+	script(src="/assets/scripts/script-profile.js" type="text/javascript" defer="")
+	script(type="text/javascript").
+		var nick="!{profile.nick}"
+		var platform="!{currentSession.platform}"
+		var mode="!{currentSession.mode}"
+		
+
+block phc
+	include ./layout/phc.pug
+	
+block main-stats
+	include ./profile/profileStats.pug
+
+block bottom
+	h3 Recent Play Sessions
+	.sessionContainer
+		include ./profile/heroOverview.pug
+		include ./profile/miscStats.pug

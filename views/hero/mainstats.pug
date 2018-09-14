@@ -1,0 +1,16 @@
+include ../mixin/stats.pug
+
+.statsContainer
+	.heroPortrait
+		img(src="/assets/images/" + currentSession.hero + ".png")
+	.Hero
+		h2= currentSession.hero.replace("_", " ")
+	.winrate
+	.Specific
+		+heroes(hero)
+	.Score
+		.overall
+			strong
+			.invisible
+				span OVERALL
+	br

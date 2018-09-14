@@ -42,7 +42,7 @@ function zScoreToPercentile(zscore) {
     zscore = parseFloat(zscore);
 
     if (isNaN(zscore)) {
-        throw new TypeError('zscore is not a valid number');
+        return 0;
     }
 
     var yZscore = -3.4;

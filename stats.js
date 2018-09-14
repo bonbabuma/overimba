@@ -93,7 +93,8 @@ let owStats = function() {
 		});
 		
 		//time-catch: sometimes damage ticks from previous characters(junkrat, symetra, etc)
-		//get added onto current character when switching.
+		//get added onto current character when switching. This leads to some characters
+		//reporting damage with ~0 time_played.
 		if (stats.time.time_played < 180000) {
 			stats.time.time_played = 180000;
 		}
@@ -249,15 +250,157 @@ let owStats = function() {
 		storeOverall();
 	};
 	
-	this.getOldStats = (platform, btag) => {
-		return db.query( PLAYERSCOLLECTION , { "profile.nick": btag }, 1).then( (data) => {
+	
+	
+	let sessionHeroStats = (platform, mode, btag, hero) => {
+		return db.query( SESSIONCOLLECTION , { "profile.nick": btag }, 1).then( (data) => {
+			let lastSessionSnapshot = data[0];
+			let hasSessionData = (lastSessionSnapshot||{}).sessions;
 			
-			return data;
+			if ( data.length == 0 || !hasSessionData ) {
+				return [];
+			} 
+			
+			let arrayWithHero = [];
+			let hasHeroDeaths;
+			let hasHeroGamesPlayed;
+			
+			lastSessionSnapshot.sessions.forEach( (session) => {
+				hasHeroDeaths = (((((session||{})[mode]||{}).heroes||{})[hero]||{}).average||{}).deaths_avg_per_10_min;
+				hasHeroGamesPlayed = (((((session||{})[mode]||{}).heroes||{})[hero]||{}).cumulative||{}).games_played;
+				
+				if ( hasHeroDeaths && hasHeroGamesPlayed ) {
+					arrayWithHero.push( session[mode].heroes[hero] );
+				}
+			});
+			
+			return arrayWithHero;
 		})
 		.catch( (error) => {
 			console.log(error);
 		});
 	}
+	
+	this.searchOW = ( platform, btag ) => {
+		return owjs
+		.search(btag)
+		.then((data) => { 
+			
+			if( data.length == 0 ) return { profile: 404 };
+			
+			return data;
+		});
+		
+	}
+	
+	this.getProfile = ( platform, btag, mode ) => {
+		return db.query( PLAYERSCOLLECTION , { "profile.nick": btag }, 1).then( (data) => {
+			return data;
+		})
+		.then( (data) => {
+			if (data.length == 0) return { profile: 404 };
+			
+			let lastStatsSnapshot = data[0];
+			let hasModeData = ((((lastStatsSnapshot||{})[mode]||{}).global||{}).average||{}).deaths_avg_per_10_min;
+			if ( !hasModeData ) return { profile: 404 };
+			
+			let currentSession = {};
+			currentSession.date = Date.now();
+			currentSession.platform = platform;
+			currentSession.mode = mode;
+			
+			let stats = {};
+			stats.quickplayStats = lastStatsSnapshot.quickplayStats;
+			stats.competitiveStats = lastStatsSnapshot.competitiveStats;
+			stats.profile = lastStatsSnapshot.profile;
+			stats.currentSession = currentSession;
+			
+			
+			let gStats = {};
+			gStats.quickplay = globalStats.quickplay.global;
+				
+			let hasRank = (stats.profile||{}).ranking;
+			if( hasRank ) {
+				gStats.rank = globalStats[hasRank].global;
+			}
+			
+			stats.globalStats = gStats;
+			
+			return stats;
+		});
+	}
+	
+	this.getDBHeroStats = (platform, btag, mode, hero) => {
+		return db.query( PLAYERSCOLLECTION , { "profile.nick": btag }, 1).then( (data) => {
+			return data;
+		})
+		.then( (data) => {
+			if (data.length == 0) return { profile: 404 };
+			let lastStatsSnapshot = data[0];
+			let hasHeroData = (((((lastStatsSnapshot||{})[mode]||{}).heroes||{})[hero]||{}).average||{}).deaths_avg_per_10_min;
+			
+			if ( !hasHeroData ) return { profile: 404 };
+			
+			return sessionHeroStats(platform, mode, btag, hero).then( (sessionArray) => {
+				let currentSession = {};
+				currentSession.date = Date.now();
+				currentSession.hero = hero.replace(":_", "");
+				currentSession.platform = platform;
+				currentSession.mode = mode;
+				
+				let heroStats = {};
+				heroStats.currentSession = currentSession;
+				heroStats.sessions = sessionArray;
+				heroStats.hero = lastStatsSnapshot[mode].heroes[hero];
+				heroStats.profile = lastStatsSnapshot.profile;
+				
+				let gStats = {};
+				gStats.quickplay = globalStats.quickplay.heroes[hero];
+				
+				let hasRank = (heroStats.profile||{}).ranking;
+				if( hasRank ) {
+					gStats.rank = globalStats[hasRank].heroes[hero];
+				}
+				
+				heroStats.globalStats = gStats;
+				
+				return heroStats;	
+			});			
+		})
+		.catch( (error) => {
+			console.log(error);
+		});
+	}
+
+		
+	this.queryStats = (platform, mode, sort, qty, skip) => {
+		
+		let q = {};
+		let s = {};
+		let query = mode + ".global.average."
+		if ( sort == "d10" ) {
+			query = query + "all_damage_done_avg_per_10_min"
+		} else {
+			query = query + "healing_done_avg_per_10_min"
+		}
+		q[query] = {$exists:true};
+		s[query] = -1;
+		return db.querySort( PLAYERSCOLLECTION , q, s, qty, skip).then( (data) => {
+			let arrPlayers = [];
+			
+			data.forEach( (player) => {
+				let rankStat = {};
+				rankStat.btag = player.profile.nick;
+				rankStat.d10 = Math.floor(player[mode].global.average.all_damage_done_avg_per_10_min) || 0;
+				rankStat.h10 = Math.floor(player[mode].global.average.healing_done_avg_per_10_min) || 0;
+				
+				arrPlayers.push(rankStat);
+			});
+			
+			return arrPlayers;
+		});
+	}
+	
 
 	this.getNewStats = (platform, btag) => {
 		let lastOverall = {};
@@ -321,9 +464,12 @@ let owStats = function() {
 						session.competitiveStats = sessionStats( data.competitiveStats, lastOverall[0].competitiveStats );
 						session.quickplayStats = sessionStats( data.quickplayStats, lastOverall[0].quickplayStats );
 						
+						//console.log(session);
+						
 						if ( Object.keys(session.competitiveStats).length > 0 || Object.keys(session.quickplayStats).length > 0 ) {
 							
 							let statsRank = data.profile.ranking;
+							//console.log("wtf " + data.profile);
 							recalculateGlobalStats (session, statsRank);
 							currentSessionStats.push(session);
 							if (currentSessionStats.length >= 10) {
@@ -332,15 +478,17 @@ let owStats = function() {
 							allSessions.sessions = currentSessionStats;
 							allSessions.profile = data.profile;
 							
-							db.replaceDocument( SESSIONCOLLECTION, { "profile.nick": btag }, allSessions ); 
-							db.replaceDocument( PLAYERSCOLLECTION, { "profile.nick": btag }, data );
+							db.replaceDocument( SESSIONCOLLECTION, { "profile.nick": btag }, allSessions );
 							
 							data.sessions = currentSessionStats;
 						}
 					} else {
-						db.replaceDocument( PLAYERSCOLLECTION, { "profile.nick": btag }, data );
-						//recalculateGlobalStats (data, data.profile.ranking);
+						//db.replaceDocument( PLAYERSCOLLECTION, { "profile.nick": btag }, data );
+						recalculateGlobalStats (data, data.profile.ranking);
 					}
+					//console.log(data.profile);
+					
+					db.replaceDocument( PLAYERSCOLLECTION, { "profile.nick": btag }, data );
 					
 					console.log("Global time: " + (Date.now() - startglobal));
 					recalculateGlobalStats (data, data.profile.ranking);//remove

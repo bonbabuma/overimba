@@ -1,0 +1,16 @@
+extends ./layout/ranks-layout.pug
+
+block header
+	include ./layout/head-ranks.pug
+	script(src="/assets/scripts/script-ranks.js" type="text/javascript" defer="")
+	script(type="text/javascript").
+		var platform="!{currentSession.platform}"
+		var mode="!{currentSession.mode}"
+		
+
+block bellcurve
+	include ./layout/bellcurve.pug
+	
+block main-stats
+	include ./ranks/table.pug
+

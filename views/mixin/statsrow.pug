@@ -1,0 +1,76 @@
+mixin blocked_per10(stat)
+	.statrow
+		.markerRank
+			img(src="/assets/images/Grandmaster.png")
+		.statname
+			span Damage blocked per 10: 
+			span.damage_blocked_per_10= Math.floor(stat * 100 )/ 100
+			.meter.red
+				span.damage_blocked_per_10_width(style="width: 0%")
+		.percent.damage_blocked_per_10_text
+		
+mixin healing_per10(stat)
+	.statrow
+		.markerRank
+			img(src="/assets/images/Grandmaster.png")
+		.statname
+			span Healing done per 10: 
+			span.healing_done_per_10= Math.floor(stat * 100 )/ 100
+			.meter.red
+				span.healing_done_per_10_width(style="width: 0%")
+		.percent.healing_done_per_10_text
+
+mixin damage_per10(stat)
+	.statrow
+		.markerRank
+			img(src="/assets/images/Grandmaster.png")
+		.statname
+			span Damage done per 10: 
+			span.damage_done_per_10= Math.floor(stat * 100 )/ 100
+			.meter.red
+				span.damage_done_per_10_width(style="width: 0%")
+		.percent.damage_done_per_10_text
+
+mixin weapon_acc(stat)
+	.statrow
+		.markerRank
+			img(src="/assets/images/Grandmaster.png")
+		.statname
+			span Weapon Accuracy: 
+			span.weapon_acc= Math.floor(stat * 100 )/ 100
+			.meter.red
+				span.weapon_acc_width(style="width: 0%")
+		.percent.weapon_acc_text
+		
+mixin elims_per10(stat)
+	.statrow
+		.markerRank
+			img(src="/assets/images/Grandmaster.png")
+		.statname
+			span Eliminations per 10: 
+			span.eliminations_per_10= Math.floor(stat * 100 )/ 100
+			.meter.red
+				span.eliminations_per_10_width(style="width: 0%")
+		.percent.eliminations_per_10_text
+				
+mixin deaths_per10(stat)
+	.statrow
+		.markerRank
+			img(src="/assets/images/Grandmaster.png")
+		.statname
+			span Deaths per 10: 
+			span.deaths_per_10= Math.floor(stat * 100 )/ 100
+			.meter.red
+				span.deaths_per_10_width(style="width: 0%")
+		.percent.deaths_per_10_text
+		
+mixin ed(stat)
+	.statrow
+		.markerRank
+			img(src="/assets/images/Grandmaster.png")
+		.statname
+			span E/D Ratio: 
+			span.ed_ratio= Math.floor(stat * 100 )/ 100
+			.meter.red
+				span.ed_ratio_width(style="width: 0%")
+		.percent.ed_ratio_text

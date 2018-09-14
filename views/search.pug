@@ -1,0 +1,16 @@
+extends ./layout/search-layout.pug
+
+block header
+	include ./layout/head-ranks.pug
+	script(src="/assets/scripts/script-search.js" type="text/javascript" defer="")
+	script(type="text/javascript").
+				var nick="!{currentSession.nick}"
+		
+
+block loading
+	include ./layout/loading.pug
+	
+block main-stats
+	include ./search/db-table.pug
+	include ./search/ow-table.pug
+

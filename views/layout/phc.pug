@@ -1,0 +1,18 @@
+.phc
+	.Profilepic 
+		img.avatar(src=profile.avatar)
+	.btag
+		span.nick= profile.nick
+	.rankvalue
+	.rankpicture
+		unless profile.ranking == null
+			img.rankimg(src="/assets/images/" + profile.ranking + ".png")
+		.ranknumber
+	.Menu
+	.modeselect
+		.modeSelectorBox
+			img.rankIcon(src='/assets/images/Grandmaster.png')
+			label.switch
+				input(type='checkbox', checked='')
+				span.slider.round
+			img.qpIcon(src='/assets/images/quickplay.png')

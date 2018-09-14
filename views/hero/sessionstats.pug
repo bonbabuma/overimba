@@ -1,0 +1,19 @@
+include ../mixin/stats.pug
+
+.sessionCardsContainer
+	each card, index in sessions
+		.sessionCard(id="card" + index)
+			.sessionHeroPortrait
+				img(src="/assets/images/" + currentSession.hero + ".png")
+			.sessionHero
+				h3= currentSession.hero
+			.sessionWinrate
+			.sessionSpecific
+				+heroes(card)
+			.sessionScore
+				.sessionOverall(id="overall" + index)
+					strong
+					.invisible
+						span OVERALL
+			br
+	

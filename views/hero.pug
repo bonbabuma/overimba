@@ -1,16 +1,28 @@
-extends ./main-layout.pug
+extends ./layout/main-layout.pug
 
 block header
-	include ./head.pug
+	include ./layout/head.pug
+	script(src="/assets/scripts/script-hero.js" type="text/javascript" defer="")
+	script(type="text/javascript").
+		var hero="!{currentSession.hero}"
+		var nick="!{profile.nick}"
+		var platform="!{currentSession.platform}"
+		var mode="!{currentSession.mode}"
 
 block phc
-	include ./phc.pug
+	include ./layout/phc.pug
 	
 block main-stats
-	include ./mainstats.pug
+	include ./hero/mainstats.pug
 
-block session-stats
-	include ./sessionstats.pug
 	
-block misc-stats
-	include ./miscstats.pug
+block bottom
+	h3 Recent Play Sessions
+	.sessionContainer
+		include ./hero/sessionstats.pug
+		include ./hero/miscstats.pug
+	
+
+	
+
+	

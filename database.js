@@ -8,8 +8,12 @@ function Mongodatabase( database ) {
 		let mongoClient;  
 		let mongoDB;
 		
-		this.query = (collection, query, limit) => {
-			return mongoDB.collection(collection).find( query ).limit( limit ).toArray();
+		this.query = (collection, query, limit, skip = 0) => {
+			return mongoDB.collection(collection).find( query ).skip(skip).limit( limit ).toArray();
+		}
+		
+		this.querySort = (collection, query, sort, limit, skip = 0) => {
+			return mongoDB.collection(collection).find( query ).sort(sort).skip(skip).limit( limit ).toArray();
 		}
 		
 		this.replaceDocument = (collection, query, document) => {

@@ -1,0 +1,200 @@
+include ./statsrow.pug
+
+mixin heroes(hero)
+	if currentSession.hero == "ana"
+		if hero.average.healing_done_avg_per_10_min
+			+healing_per10(hero.average.healing_done_avg_per_10_min)
+		if hero.average.all_damage_done_avg_per_10_min
+			+damage_per10(hero.average.all_damage_done_avg_per_10_min)
+		if hero.average.weapon_accuracy
+			+weapon_acc(hero.average.weapon_accuracy)
+		
+	else if currentSession.hero == "bastion"
+		if hero.average.all_damage_done_avg_per_10_min
+			+damage_per10(hero.average.all_damage_done_avg_per_10_min)
+		if hero.average.weapon_accuracy
+			+weapon_acc(hero.average.weapon_accuracy)
+
+	else if currentSession.hero == "brigitte"
+		+blocked_per10((hero.average.damage_blocked_avg_per_10_min))
+		if hero.average.healing_done_avg_per_10_min
+			+healing_per10(hero.average.healing_done_avg_per_10_min)
+		if hero.average.all_damage_done_avg_per_10_min
+			+damage_per10(hero.average.all_damage_done_avg_per_10_min)
+	
+	else if currentSession.hero == "doomfist"
+		if hero.average.all_damage_done_avg_per_10_min
+			+damage_per10(hero.average.all_damage_done_avg_per_10_min)
+		if hero.average.weapon_accuracy
+			+weapon_acc(hero.average.weapon_accuracy)
+	
+	else if currentSession.hero == "d.va"
+		+blocked_per10((hero.average.damage_blocked_avg_per_10_min))
+		if hero.average.all_damage_done_avg_per_10_min
+			+damage_per10(hero.average.all_damage_done_avg_per_10_min)
+		if hero.average.weapon_accuracy
+			+weapon_acc(hero.average.weapon_accuracy)
+		
+	else if currentSession.hero == "genji"
+		if hero.average.all_damage_done_avg_per_10_min
+			+damage_per10(hero.average.all_damage_done_avg_per_10_min)
+		if hero.average.weapon_accuracy
+			+weapon_acc(hero.average.weapon_accuracy)
+		
+	else if currentSession.hero == "hanzo"
+		if hero.average.all_damage_done_avg_per_10_min
+			+damage_per10(hero.average.all_damage_done_avg_per_10_min)
+		if hero.average.weapon_accuracy
+			+weapon_acc(hero.average.weapon_accuracy)
+	
+	else if currentSession.hero == "junkrat"
+		if hero.average.all_damage_done_avg_per_10_min
+			+damage_per10(hero.average.all_damage_done_avg_per_10_min)
+		if hero.average.weapon_accuracy
+			+weapon_acc(hero.average.weapon_accuracy)
+		
+	else if currentSession.hero == "lúcio"
+		if hero.average.healing_done_avg_per_10_min
+			+healing_per10(hero.average.healing_done_avg_per_10_min)
+		if hero.average.all_damage_done_avg_per_10_min
+			+damage_per10(hero.average.all_damage_done_avg_per_10_min)
+		if hero.average.weapon_accuracy
+			+weapon_acc(hero.average.weapon_accuracy)
+		
+	else if currentSession.hero == "mccree"
+		if hero.average.all_damage_done_avg_per_10_min
+			+damage_per10(hero.average.all_damage_done_avg_per_10_min)
+		if hero.average.weapon_accuracy
+			+weapon_acc(hero.average.weapon_accuracy)
+	
+	else if currentSession.hero == "mei"
+		if hero.average.all_damage_done_avg_per_10_min
+			+damage_per10(hero.average.all_damage_done_avg_per_10_min)
+		+blocked_per10((hero.average.damage_blocked_avg_per_10_min))
+		if hero.average.weapon_accuracy
+			+weapon_acc(hero.average.weapon_accuracy)
+	
+	else if currentSession.hero == "mercy"
+		if hero.average.healing_done_avg_per_10_min
+			+healing_per10(hero.average.healing_done_avg_per_10_min)
+		
+	else if currentSession.hero == "moira"
+		if hero.average.healing_done_avg_per_10_min
+			+healing_per10(hero.average.healing_done_avg_per_10_min)
+		if hero.average.all_damage_done_avg_per_10_min
+			+damage_per10(hero.average.all_damage_done_avg_per_10_min)
+
+	else if currentSession.hero == "orisa"
+		+blocked_per10((hero.average.damage_blocked_avg_per_10_min))
+		if hero.average.all_damage_done_avg_per_10_min
+			+damage_per10(hero.average.all_damage_done_avg_per_10_min)
+		if hero.average.weapon_accuracy
+			+weapon_acc(hero.average.weapon_accuracy)
+		
+	else if currentSession.hero == "pharah"
+		if hero.average.all_damage_done_avg_per_10_min
+			+damage_per10(hero.average.all_damage_done_avg_per_10_min)
+		if hero.average.weapon_accuracy
+			+weapon_acc(hero.average.weapon_accuracy)
+	
+	else if currentSession.hero == "reaper"
+		if hero.average.all_damage_done_avg_per_10_min
+			+damage_per10(hero.average.all_damage_done_avg_per_10_min)
+		if hero.average.weapon_accuracy
+			+weapon_acc(hero.average.weapon_accuracy)
+		
+	else if currentSession.hero == "reinhardt"
+		+blocked_per10((hero.average.damage_blocked_avg_per_10_min))
+		+damage_per10(hero.average.all_damage_done_avg_per_10_min)
+		
+	else if currentSession.hero == "roadhog"
+		if hero.average.all_damage_done_avg_per_10_min
+			+damage_per10(hero.average.all_damage_done_avg_per_10_min)
+		if hero.average.weapon_accuracy
+			+weapon_acc(hero.average.weapon_accuracy)
+		
+	else if currentSession.hero == "soldier76"
+		if hero.average.all_damage_done_avg_per_10_min
+			+damage_per10(hero.average.all_damage_done_avg_per_10_min)
+		if hero.average.weapon_accuracy
+			+weapon_acc(hero.average.weapon_accuracy)
+		
+	else if currentSession.hero == "sombra"
+		if hero.average.all_damage_done_avg_per_10_min
+			+damage_per10(hero.average.all_damage_done_avg_per_10_min)
+		if hero.average.weapon_accuracy
+			+weapon_acc(hero.average.weapon_accuracy)
+		
+	else if currentSession.hero == "symmetra"
+		if hero.average.all_damage_done_avg_per_10_min
+			+damage_per10(hero.average.all_damage_done_avg_per_10_min)
+		if hero.average.weapon_accuracy
+			+weapon_acc(hero.average.weapon_accuracy)
+		
+	else if currentSession.hero == "torbjörn"
+		if hero.average.all_damage_done_avg_per_10_min
+			+damage_per10(hero.average.all_damage_done_avg_per_10_min)
+		if hero.average.weapon_accuracy
+			+weapon_acc(hero.average.weapon_accuracy)
+	
+	else if currentSession.hero == "tracer"
+		if hero.average.all_damage_done_avg_per_10_min
+			+damage_per10(hero.average.all_damage_done_avg_per_10_min)
+		if hero.average.weapon_accuracy
+			+weapon_acc(hero.average.weapon_accuracy)
+		
+	else if currentSession.hero == "widowmaker"
+		if hero.average.all_damage_done_avg_per_10_min
+			+damage_per10(hero.average.all_damage_done_avg_per_10_min)
+		if hero.average.weapon_accuracy
+			+weapon_acc(hero.average.weapon_accuracy)
+		
+	else if currentSession.hero == "winston"
+		+blocked_per10((hero.average.damage_blocked_avg_per_10_min))
+		if hero.average.all_damage_done_avg_per_10_min
+			+damage_per10(hero.average.all_damage_done_avg_per_10_min)
+
+	else if currentSession.hero == "wrecking_ball"
+		if hero.average.all_damage_done_avg_per_10_min
+			+damage_per10(hero.average.all_damage_done_avg_per_10_min)
+		if hero.average.weapon_accuracy
+			+weapon_acc(hero.average.weapon_accuracy)
+		
+	else if currentSession.hero == "zarya"
+		+blocked_per10((hero.average.damage_blocked_avg_per_10_min))
+		if hero.average.all_damage_done_avg_per_10_min
+			+damage_per10(hero.average.all_damage_done_avg_per_10_min)
+		if hero.average.weapon_accuracy
+			+weapon_acc(hero.average.weapon_accuracy)
+	
+	else if currentSession.hero == "zenyatta"
+		if hero.average.healing_done_avg_per_10_min
+			+healing_per10(hero.average.healing_done_avg_per_10_min)
+		if hero.average.all_damage_done_avg_per_10_min
+			+damage_per10(hero.average.all_damage_done_avg_per_10_min)
+		if hero.average.weapon_accuracy
+			+weapon_acc(hero.average.weapon_accuracy)
+		
+	if hero.average.eliminations_avg_per_10_min
+		+elims_per10(hero.average.eliminations_avg_per_10_min)
+	if hero.average.deaths_avg_per_10_min
+		+deaths_per10(hero.average.deaths_avg_per_10_min)
+	if hero.average.eliminations_per_life
+		+ed(hero.average.eliminations_per_life)
+	
+	
+mixin general
+	if global.average.all_damage_done_avg_per_10_min
+		+damage_per10(global.average.all_damage_done_avg_per_10_min)
+	if global.average.healing_done_avg_per_10_min
+		+healing_per10(global.average.healing_done_avg_per_10_min)
+	if global.average.damage_blocked_avg_per_10_min
+		+blocked_per10(global.average.damage_blocked_avg_per_10_min)
+	if global.average.weapon_accuracy
+		+weapon_acc(global.average.weapon_accuracy)
+	if global.average.eliminations_avg_per_10_min
+		+elims_per10(global.average.eliminations_avg_per_10_min)
+	if global.average.deaths_avg_per_10_min
+		+deaths_per10(global.average.deaths_avg_per_10_min)
+	if global.average.eliminations_per_life
+		+ed(global.average.eliminations_per_life)

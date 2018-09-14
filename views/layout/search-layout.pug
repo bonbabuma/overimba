@@ -1,0 +1,17 @@
+doctype html
+html(lang='en')
+	block header
+	body
+		#main
+			ul.navbar
+				li
+					a(href="#home") OVERimba
+				li
+					a.navbar-active(href="/pc/ranks") Ranks
+				li
+					a(href="http://192.168.0.150:4567") Community
+				li(style="float:right;border-right: none;")
+					a(href="#about") Login
+			block loading
+			block main-stats
+			
