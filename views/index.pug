@@ -1,0 +1,17 @@
+extends ./layout/index-layout.pug
+
+block header
+	include ./layout/head-index.pug
+	script(src="/assets/scripts/script-search.js" type="text/javascript" defer="")
+	script(type="text/javascript").
+				
+		
+
+block loading
+	center
+		h3 OVERimba
+	
+block main-stats
+	include ./search/db-table.pug
+	include ./search/ow-table.pug
+

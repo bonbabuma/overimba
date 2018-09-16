@@ -4,35 +4,28 @@ window.onload = function() {
 	
   let playerListDirectives = {
 	'avatar': {
-		src: function() { return "/assets/images/" + this.heroName + ".png";},
+		src: function() { return this.avatar;},
 		'data-href': function() { return this.clickRow; }},
 	'btag':{
-		text: function () { return this.heroName ;},
-		'data-href': function() { return this.clickRow; }},
-	'ed':{
-		text: function () { return this.ed ;},
-		'data-href': function() { return this.clickRow; }},
-	'time':{
-		text: function () { return Math.floor(this.time / 1000 / 60 / 60) + "h";},
+		text: function () { return this.playerName ;},
 		'data-href': function() { return this.clickRow; }}
-	
 };
 		
 	
   
   
 		
-	/*
+	
 	const btagform = document.getElementById('btagform');
 	btagform.onsubmit = function () {
 		
 		let btag = document.getElementById('btagsearch').value;
 		btag = btag.replace('#',"-");
 		
-		//location.href = "api/pc/" +  btag;
+		location.href = "/playersearch/pc/" +  btag;
 		return false;
 	}
-	*/
+	
 	
 	function getAllPlayers() {
 		let req = "/api/v2/search/pc/" + nick
@@ -42,10 +35,11 @@ window.onload = function() {
 			console.log(data);
 			if ( data.length == 1) {
 				if (data[0].visibility.isPublic) {
-					$.get("/api/v2/all/pc/" + data[0].urlName, (data) => {
+					console.log(data[0]);
+					$.get("/api/v2/all/pc/" + data[0].urlName, (newData) => {
+						console.log("here");
 						window.location = "/player/pc/" + data[0].urlName;
 					});
-					console.log(data[0]);
 				}
 			}
 			
@@ -55,9 +49,10 @@ window.onload = function() {
 			data.forEach( (player) => {
 				if ( player.visibility.isPublic ) {
 					let curPlayer = {};
-					curPlayer.clickRow = "/player/pc/" + player.urlName + "?mode=quickplayStats";
+					curPlayer.clickRow = "/playersearch/pc/" + player.urlName
 					curPlayer.avatar = player.portrait;
-					curPlayer.PlayerName = player.urlName;
+					console.log(player.urlName);
+					curPlayer.playerName = player.urlName;
 					
 					
 					playerList.push(curPlayer);
@@ -72,9 +67,16 @@ window.onload = function() {
 				playerList.push(curPlayer);
 			}
 			
-			console.list
 			
-			$(".heroList").render(playerList, playerListDirectives);
+			//console.log(playerList);
+			$(".HeroTable .heroList").render(playerList, playerListDirectives);
+			
+			$(".btag").click(function() {
+				window.location = $(this).data("href");
+			});
+			$("img.avatar").click(function() {
+				window.location = $(this).data("href");
+			});
 			
 		});
 	}

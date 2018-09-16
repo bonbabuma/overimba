@@ -337,7 +337,7 @@ window.onload = function() {
 		let btag = document.getElementById('btagsearch').value;
 		btag = btag.replace('#',"-");
 		
-		//location.href = "/search/" +  btag;
+		location.href = "/playersearch/pc/" +  btag;
 		return false;
 	}
 	

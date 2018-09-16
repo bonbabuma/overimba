@@ -43,7 +43,9 @@ app.use('/assets/', express.static('front'));
 
 
 app.get('/', (req, res) => {
-	res.render('index');
+	let currentSession = {};
+	currentSession.nick = ""
+	res.render('index', currentSession);
 });
 
 
